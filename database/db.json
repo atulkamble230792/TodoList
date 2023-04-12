@@ -1,29 +1,3 @@
 {
-  "todo_data": [
-    {
-      "title": "testing",
-      "description": "test",
-      "id": 1
-    },
-    {
-      "title": "hghghhgh",
-      "description": "hghghghghgh",
-      "id": 3
-    },
-    {
-      "title": "hghghghgh",
-      "description": "ghghghghghghg",
-      "id": 4
-    },
-    {
-      "title": "ghgfhfhghg",
-      "description": "hghghghghghg",
-      "id": 5
-    },
-    {
-      "title": "work",
-      "description": "java",
-      "id": 6
-    }
-  ]
+  "todo_data": []
 }
