@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+</head>
+<body>
+    <!-- Modal -->
+    <div class="modal fade" id="todoaddmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Todo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="todoform" autocomplete="off">
+                    <div class="form-group">
+                        <label for="todoTitle">Title</label>
+                        <input type="text" class="form-control" id="todoTitle" placeholder="Enter title" required>
+                        <span id="title_error" style="display: none;color: red;">Please enter todo Title</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="todoDescription">Description</label>
+                        <input type="text" class="form-control" id="todoDescription" placeholder="Description" required>
+                        <span id="desc_error" style="display: none;color: red;">Please enter todo Description</span>
+                        <span id="desc_error_num" style="display: none;color: red;">Numeric value not allowed to enter in description</span>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" onclick="addtodoData()">Save changes</button>
+            </div>
+        </div>
+        </div>
+    </div>
+    <div class="modal fade" id="edittodomodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit Todo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="todoform" autocomplete="off">
+                    <div class="form-group">
+                        <label for="edittodoTitle">Title</label>
+                        <input type="text" class="form-control" id="edittodoTitle" placeholder="Enter title" value="" required>
+                        <span id="edit_title_error" style="display: none;color: red;">Please enter todo Title</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="edittodoDescription">Description</label>
+                        <input type="text" class="form-control" id="edittodoDescription" placeholder="Enter Description"  value="" required>
+                        <span id="edit_desc_error" style="display: none;color: red;">Please enter todo Description</span>
+                        <span id="edit_desc_error_num" style="display: none;color: red;">Numeric value not allowed to enter in description</span>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+            <input id="updatetodoid" type="hidden" value="">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" onclick="updateTodoData()">Update</button>
+            </div>
+        </div>
+        </div>
+    </div>
+    <div class="modal fade" id="deletetodomodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to delete to-do <span id="delete_todo_id"></span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-footer">
+            <input id="deletetodoid" type="hidden" value="">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+            <button type="button" class="btn btn-primary" onclick="removeTodoData()" data-dismiss="modal">Yes</button>
+            </div>
+        </div>
+        </div>
+    </div>
+    <div class="modal fade" id="viewtodomodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">To-do</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="todoform" autocomplete="off">
+                    <div class="form-group">
+                        <label for="viewtodoTitle">Title</label>
+                        <input type="text" class="form-control" id="viewtodoTitle"  value="" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="viewtodoDescription">Description</label>
+                        <input type="text" class="form-control" id="viewtodoDescription" value="" disabled>
+                    </div>
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="">
+            <div class="card">
+                <h4 class="todolist"> To-do List</h4>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <!-- <button type="button" class="btn btn-primary">Add Todo</button> -->
+                    <!-- Button trigger modal -->
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-sm-10">
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#todoaddmodal" data-backdrop="static" data-keyboard="false">
+                                    Add To-do
+                                </button>
+                            </div>
+                            <div class="col-sm-2">
+                                <input type="text" id="search_text" style="float: right;" class="search_box" placeholder="Search here..." onkeyup="getFilterData()">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="table-responsive" style="margin-top: 10px">
+                        <table class="table" id="todo_table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Sr No</th>
+                                    <th scope="col">Title</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="todo_body">
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://kit.fontawesome.com/0867499bf9.js" crossorigin="anonymous"></script>
+    <script src="js/index.js"></script>
+    <script>
+        //Display todo data on page load
+        show_data()
+    </script>
+</body>
+</html>
