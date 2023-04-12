@@ -1,6 +1,32 @@
-
-//display todo data
 function show_data(){
+    var table_body =document.getElementById('todo_body');
+    table_body.innerHTML = ""
+    fetch("http://localhost:3000/todo_data")
+    .then(res => res.json())
+    .then(json => {
+        json.map(data => {
+            table_body.append(getTodoData(data))
+        })
+    })
+}
+
+
+
+//create table data
+function getTodoData({id,title,description}){
+    let td_data = document.createElement('tr');
+    td_data.innerHTML = `
+    <th scope="row">${id}</th>
+    <td>${title}</td>
+    <td>${description}</td>
+    <td class="btn-group">
+        <button type="button" class="btn btn-edit" onclick="editTodoData(${id})">Edit</button>
+        <button type="button" id="delete_todo" class="btn btn-delete" onclick="deleteTodoData(${id})">Delete</button>
+    </td>`;
+    return td_data
+}
+//display todo data
+function show_data_old(){
     console.log('hello---sanjay');
     fetch("http://localhost:3000/todo_data")
     .then(res => res.json())
