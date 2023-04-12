@@ -1,7 +1,7 @@
 
 //display todo data
 function show_data(){
-    console.log('hello---world');
+    console.log('hello---sanjay');
     fetch("http://localhost:3000/todo_data")
     .then(res => res.json())
     .then(data => {
