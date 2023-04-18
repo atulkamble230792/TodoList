@@ -1,15 +1,38 @@
-function show_data(){
-    var table_body =document.getElementById('todo_body');
-    table_body.innerHTML = ""
-    fetch("http://localhost:3000/todo_data")
-    .then(res => res.json())
-    .then(json => {
-        json.map(data => {
-            table_body.append(getTodoData(data))
-        })
-    })
-}
+// function show_data(){
+//     var table_body =document.getElementById('todo_body');
+//     table_body.innerHTML = ""
+//     fetch("http://localhost:3000/todo_data")
+//     .then(res => {
+//         console.log(res)
+//         console.log(res.json())
+//     })
+// }
 
+
+async function show_data() {
+    try {
+        const response = await fetch("http://localhost:3000/todo_data");
+        let api_status = response.status
+
+        if(api_status == 200){
+            const jsonData = await response.json();
+
+            if(jsonData.length > 0){
+
+            }else{
+                
+            }
+
+        }else if(api_status == 404){
+            throw new Error('Not Found')
+        }else{
+            throw new Error('Network error.Please try again')
+        }
+    } catch (error) {
+        console.log(error)
+    }
+    
+}
 
 
 //create table data
