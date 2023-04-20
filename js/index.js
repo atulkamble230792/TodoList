@@ -16,9 +16,24 @@ async function show_data() {
 
         if(api_status == 200){
             const jsonData = await response.json();
+            console.log(jsonData)
 
             if(jsonData.length > 0){
-
+                let tbody = '';
+                jsonData.map((jsonData, index) => {
+                    let sr_no = index + 1;
+                    tbody = tbody + `<tr>`;
+                    tbody = tbody + `<td>${sr_no}</td>`;
+                    tbody = tbody + `<td>${jsonData.title}</td>`;
+                    tbody = tbody + `<td>${jsonData.description}</td>`;
+                    tbody = tbody + `<td class="btn-group">                    
+                    <button type="button" id="edit_todo" class="btn btn-edit" onclick="editTodoData(${jsonData.id})"><i class="fa-solid fa-pencil"></i></button>
+                    <button type="button" id="delete_todo" class="btn btn-delete" onclick="deleteTodoData(${jsonData.id})"><i class="fa-solid fa-trash"></i></button>
+                    </td>`;
+                    tbody += `</tr>`;
+                    });
+                    tbody += "</table>";
+                    document.getElementById("todo_body").innerHTML = tbody;
             }else{
                 
             }
@@ -138,7 +153,7 @@ function addtodoData(){
 
 
 //Delete todo Data
-function deleteTodoData(delete_id){
+function deleteTodoData(delete_id,index){
 
 fetch(`http://localhost:3000/todo_data/${delete_id}`, {
     method: 'PATCH',
@@ -153,7 +168,7 @@ fetch(`http://localhost:3000/todo_data/${delete_id}`, {
     .then(data => {
         if(data){
             document.getElementById("delete_todo_id").innerHTML = data.title;
-            document.getElementById("deletetodoid").value = data.id;
+            document.getElementById("deletetodoid").value = data.index;
             $('#deletetodomodal').modal({backdrop: 'static', keyboard: false})
             $('#deletetodomodal').modal('show')
         }
