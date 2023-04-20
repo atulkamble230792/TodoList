@@ -48,6 +48,7 @@ function getTodoData({id,title,description}){
     </td>`;
     return td_data
 }
+
 //display todo data
 function show_data_old(){
     console.log('hello---sanjay');
