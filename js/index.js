@@ -1,14 +1,3 @@
-// function show_data(){
-//     var table_body =document.getElementById('todo_body');
-//     table_body.innerHTML = ""
-//     fetch("http://localhost:3000/todo_data")
-//     .then(res => {
-//         console.log(res)
-//         console.log(res.json())
-//     })
-// }
-
-
 async function show_data() {
     try {
         const response = await fetch("http://localhost:3000/todo_data");
@@ -16,8 +5,6 @@ async function show_data() {
 
         if(api_status == 200){
             const jsonData = await response.json();
-            console.log(jsonData)
-
             if(jsonData.length > 0){
                 let tbody = '';
                 jsonData.map((jsonData, index) => {
@@ -47,51 +34,6 @@ async function show_data() {
         console.log(error)
     }
     
-}
-
-
-//create table data
-function getTodoData({id,title,description}){
-    let td_data = document.createElement('tr');
-    td_data.innerHTML = `
-    <th scope="row">${id}</th>
-    <td>${title}</td>
-    <td>${description}</td>
-    <td class="btn-group">
-        <button type="button" class="btn btn-edit" onclick="editTodoData(${id})">Edit</button>
-        <button type="button" id="delete_todo" class="btn btn-delete" onclick="deleteTodoData(${id})">Delete</button>
-    </td>`;
-    return td_data
-}
-
-//display todo data
-function show_data_old(){
-    console.log('hello---sanjay');
-    fetch("http://localhost:3000/todo_data")
-    .then(res => res.json())
-    .then(data => {
-        //return false
-        if(data.length > 0){
-            let sr_no = 1;
-            let td_data = "";
-
-            for(let i=0; i< data.length; i++){
-                td_data  += `<tr>
-                <td scope="row">${sr_no}</td>
-                <td>${data[i]['title']}</td>
-                <td>${data[i]['description']}</td>
-                <td class="btn-group">
-                    <button type="button" id="edit_todo" class="btn btn-edit" onclick="editTodoData(${data[i]['id']})"><i class="fa-solid fa-pencil"></i></button>
-                    <button type="button" id="delete_todo" class="btn btn-delete" onclick="deleteTodoData(${data[i]['id']})"><i class="fa-solid fa-trash"></i></button>
-                </td></tr>`;
-
-                document.getElementById("todo_body").innerHTML = td_data;
-                sr_no++;
-            }
-        }else{
-            document.getElementById("todo_body").innerHTML = "<td colspan='4' style='text-align:center'>Data not available.</td>";
-        }
-    })
 }
 
 //add todo data
@@ -151,11 +93,9 @@ function addtodoData(){
 
 }
 
-
 //Delete todo Data
-function deleteTodoData(delete_id,index){
-
-fetch(`http://localhost:3000/todo_data/${delete_id}`, {
+function deleteTodoData(delete_id){
+    fetch(`http://localhost:3000/todo_data/${delete_id}`, {
     method: 'PATCH',
     headers: {
         'Content-Type':'application/json'
@@ -168,7 +108,7 @@ fetch(`http://localhost:3000/todo_data/${delete_id}`, {
     .then(data => {
         if(data){
             document.getElementById("delete_todo_id").innerHTML = data.title;
-            document.getElementById("deletetodoid").value = data.index;
+            document.getElementById("deletetodoid").value = data.id;
             $('#deletetodomodal').modal({backdrop: 'static', keyboard: false})
             $('#deletetodomodal').modal('show')
         }
